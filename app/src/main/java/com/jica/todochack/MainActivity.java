@@ -2,6 +2,7 @@ package com.jica.todochack;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
@@ -16,8 +17,8 @@ public class MainActivity extends AppCompatActivity {
     Button btnAddList;
     Button btnCalender;
     Button ivTodoMenu;
-
     RecyclerView rvTodayList;
+    TodoAdapter adapter;
 
 
 
@@ -42,6 +43,27 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+        //xml UI를 전개하여 액티비티 연결
+        setContentView(R.layout.activity_item_todo);
+
+        //UI객체 얻기
+        rvTodayList = findViewById(R.id.rvTodayList);
+
+        //RecyclerView의 보여주기 설정(LinearView형태 - LinearLayoutManager)
+        //                          (GridView 형태 - GridLayoutManager)
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        //GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
+        rvTodayList.setLayoutManager(layoutManager);
+
+        //커스텀 어댑터 객체를 생성
+        //커스텀 어뎁터 객체는 원본데이터를 직접 관리하고
+        //리사이클러뷰와 상호작용을 하면서 원본데이터 1개 항목을 항목뷰로 만들어서 전달한다.
+        //adapter = new PersonAdapterOld();
+        adapter = new TodoAdapter();
+
+        //어댑터 내부에서 직접 원본 데이터를 관리하도록 했다.
+        adapter.addItem(new Todo("메모메모메모"));
 
 
     }
