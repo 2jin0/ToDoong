@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-
+/*
         //xml UI를 전개하여 액티비티 연결
         setContentView(R.layout.activity_item_todo);
 
@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
 
         //어댑터 내부에서 직접 원본 데이터를 관리하도록 했다.
         adapter.addItem(new Todo("메모메모메모"));
-
+ */
 
     }
 
