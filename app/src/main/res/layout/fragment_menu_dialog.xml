@@ -7,7 +7,7 @@
     android:background="@drawable/corner_shape">
 
     <Button
-        android:id="@+id/btnModify_dialog"
+        android:id="@+id/btnUpdate"
         android:layout_width="80dp"
         android:layout_height="40dp"
         android:layout_marginStart="25dp"
@@ -18,7 +18,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/btnDelete_dialog"
+        android:id="@+id/btnDelete"
         android:layout_width="80dp"
         android:layout_height="40dp"
         android:layout_marginStart="23dp"
@@ -27,11 +27,11 @@
         android:background="@drawable/ic_btn_normal"
         android:text="삭제"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/btnModify_dialog"
+        app:layout_constraintStart_toEndOf="@+id/btnUpdate"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/tvTodoList_dialog"
+        android:id="@+id/tvTodo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"

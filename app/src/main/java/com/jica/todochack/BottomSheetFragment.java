@@ -1,33 +1,18 @@
 package com.jica.todochack;
 
-import android.content.Context;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
-import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
-
-import java.util.Objects;
-
-import static androidx.core.content.ContextCompat.getSystemService;
 
 public class BottomSheetFragment extends BottomSheetDialogFragment {
     Button btnCancel_bs;
@@ -71,7 +56,7 @@ public class BottomSheetFragment extends BottomSheetDialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_bottom_sheet, container, false);
 
-        etAddItem = view.findViewById(R.id.etAddItem);
+        etAddItem = view.findViewById(R.id.etAddTodo);
 
        //x버튼 클릭시 fragment_bottom_sheet 종료
         //Fragment에서 findViewById를 입력하면 오류가 난다.

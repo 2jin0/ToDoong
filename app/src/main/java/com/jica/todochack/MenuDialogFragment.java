@@ -4,7 +4,6 @@ import android.os.Bundle;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,7 +34,7 @@ public class MenuDialogFragment extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_menu_dialog, container, false);
 
-        etAddItem = view.findViewById(R.id.etAddItem);
+        etAddItem = view.findViewById(R.id.etAddTodo);
 
         //x버튼 클릭시 fragment_menu_dialog 종료
         //Fragment에서 findViewById를 입력하면 오류가 난다.

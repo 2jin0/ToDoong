@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
         //                          (GridView 형태 - GridLayoutManager)
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         //GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
-        rvTodayList.setLayoutManager(layoutManager);
+        rvTodayList.setLayoutManager(layoutManager);    //NullPointException....
 
         //커스텀 어댑터 객체를 생성
         //커스텀 어뎁터 객체는 원본데이터를 직접 관리하고
@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
                 alertDialog.show();
 
                 //수정버튼 클릭시 fragment_bottom_sheet 출력
-                Button btnModify_dialog = dialogView.findViewById(R.id.btnModify_dialog);
+                Button btnModify_dialog = dialogView.findViewById(R.id.btnUpdate);
                 btnModify_dialog.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -106,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
                 });
 
                 //x버튼 클릭시 다이얼로그 창에서 나가기
-                Button btnCancle_dialog = dialogView.findViewById(R.id.btnDelete_dialog);
+                Button btnCancle_dialog = dialogView.findViewById(R.id.btnDelete);
                 btnCancle_dialog.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
