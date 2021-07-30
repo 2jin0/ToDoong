@@ -2,31 +2,42 @@ package com.jica.todochack;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
-    Button btnAddList;
-    Button btnCalender;
-    Button ivTodoMenu;
+    //Database
+    SQLiteDatabase sqLiteDatabase;
+    SQLiteActivity.DBHelper dbHelper;
+
+    //UI객체
+    Button btnAddList, btnCalender; //mainActivity UI객체
     RecyclerView rvTodayList;
     TodoAdapter adapter;
 
+    EditText etAddItem, etTodo_text;
+    TextView tvResult;
 
+    Button ivTodoMenu;
 
     @SuppressLint("WrongViewCast")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
         //+버튼 클릭시 할 일 추가 바텀씨트 호출
         btnAddList = findViewById(R.id.btnAddList);
@@ -65,6 +76,25 @@ public class MainActivity extends AppCompatActivity {
         //어댑터 내부에서 직접 원본 데이터를 관리하도록 했다.
         adapter.addItem(new Todo("메모메모메모"));
  */
+        ivTodoMenu = findViewById(R.id.ivTodoMenu);
+        ivTodoMenu.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                MenuDialogFragment menuDialogFragment = new MenuDialogFragment();
+                menuDialogFragment.show(getSupportFragmentManager(), menuDialogFragment.getTag());
+
+                Button btnUpdate, btnDelete, btnCancel_dialog;
+                //TextView tvTodo = editTextID.getText().toString();  //사용자가 입력 한 값 가져오기?
+
+                btnUpdate = findViewById(R.id.btnUpdate);       //수정버튼 -- 클릭시 할일추가란(기존입력내용보여짐)으로 이동.
+                btnDelete = findViewById(R.id.btnDelete);       //삭제버튼 -- 클릭시 목록 삭제
+                btnCancel_dialog = findViewById(R.id.btnCancel_dialog); //취소버튼 -- 다이얼로그 종료
+                //tvTodo.setText((CharSequence) tvTodo);
+
+
+            }
+        });
 
     }
 
@@ -76,72 +106,69 @@ public class MainActivity extends AppCompatActivity {
         ivTodoMenu.setOnClickListener(new View.OnClickListener() {
         }
      */
-        public void custom_dialog(View view) {
-                //Dialog - 투두리스트 수정/삭제
-                View dialogView = getLayoutInflater().inflate(R.layout.dialog_menu, null);
+    public void custom_dialog(View view) {
+        //Dialog - 투두리스트 수정/삭제
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog_menu, null);
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
-                builder.setView(dialogView);
+        AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+        builder.setView(dialogView);
 
-                final AlertDialog alertDialog = builder.create();
-                alertDialog.show();
+        final AlertDialog alertDialog = builder.create();
+        alertDialog.show();
 
-                //수정버튼 클릭시 fragment_bottom_sheet 출력
-                Button btnModify_dialog = dialogView.findViewById(R.id.btnUpdate);
-                btnModify_dialog.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        View dialogView = getLayoutInflater().inflate(R.layout.fragment_bottom_sheet, null);    //수정페이지 출력
-                        alertDialog.dismiss();  //다이얼로그 닫기
-                    }
-                });
-
-                //삭제버튼 클릭시 해당 체크리스트 삭제
-                Button btnDel_dialog = dialogView.findViewById(R.id.btnCancel_dialog);
-                btnDel_dialog.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        alertDialog.dismiss();  //다이얼로그 닫기
-                    }
-                });
-
-                //x버튼 클릭시 다이얼로그 창에서 나가기
-                Button btnCancle_dialog = dialogView.findViewById(R.id.btnDelete);
-                btnCancle_dialog.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        alertDialog.dismiss();  //다이얼로그 닫기
-                    }
-                });
-            }
-
-            /*
-            //모달상자 - 사용안함
+        //수정버튼 클릭시 fragment_bottom_sheet 출력
+        Button btnModify_dialog = dialogView.findViewById(R.id.btnUpdate);
+        btnModify_dialog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder oDialog = new AlertDialog.Builder(this,
-                        android.R.style.Theme_DeviceDefault_Light_Dialog);  //두번째 인자에 테마 지정
-
-                oDialog.setMessage("할 일")
-                        .setTitle("일반 Dialog")
-                        .setPositiveButton("삭제", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Log.i("Dialog", "취소");
-                                Toast.makeText(getApplicationContext(), "취소", Toast.LENGTH_LONG).show();
-                            }
-                        }).setNeutralButton("수정, new DialogInterface.OnClickListener()") {
-                    public void onClick (DialogInterface dialog,int which){
-                        m_oMainActivity.finish();
-                    }
-                }).show();
-                //.setCancelable(false) // 백버튼으로 팝업창이 닫히지 않도록 한다.
+                View dialogView = getLayoutInflater().inflate(R.layout.fragment_bottom_sheet, null);    //수정페이지 출력
+                alertDialog.dismiss();  //다이얼로그 닫기
             }
+        });
 
-             */
+        //삭제버튼 클릭시 해당 체크리스트 삭제
+        Button btnDel_dialog = dialogView.findViewById(R.id.btnCancel_dialog);
+        btnDel_dialog.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();  //다이얼로그 닫기
+            }
+        });
 
+        //x버튼 클릭시 다이얼로그 창에서 나가기
+        Button btnCancle_dialog = dialogView.findViewById(R.id.btnDelete);
+        btnCancle_dialog.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();  //다이얼로그 닫기
+            }
+        });
+    }
 
+/*
+    //모달상자 - 사용안함
+    @Override
+    public void onClick(View v) {
+        AlertDialog.Builder oDialog = new AlertDialog.Builder(this,
+                android.R.style.Theme_DeviceDefault_Light_Dialog);  //두번째 인자에 테마 지정
 
+        oDialog.setMessage("할 일")
+                .setTitle("일반 Dialog")
+                .setPositiveButton("삭제", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Log.i("Dialog", "취소");
+                        Toast.makeText(getApplicationContext(), "취소", Toast.LENGTH_LONG).show();
+                    }
+                }).setNeutralButton("수정, new DialogInterface.OnClickListener()") {
+            public void onClick (DialogInterface dialog,int which){
+                m_oMainActivity.finish();
+            }
+        }).show();
+        //.setCancelable(false) // 백버튼으로 팝업창이 닫히지 않도록 한다.
+    }
+
+ */
 
 
 

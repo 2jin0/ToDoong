@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
-    public static String NAME = "employee.db";
+    public static String NAME = "todoDB.db";
     public static int VERSION = 1;
 
 

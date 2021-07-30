@@ -15,8 +15,9 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
-public class Dictionary2Activity extends AppCompatActivity implements View.OnClickListener {
+public class SQLiteActivity extends AppCompatActivity implements View.OnClickListener {
     //Database
     SQLiteDatabase sqLiteDatabase;
     DBHelper dbHelper;
@@ -24,8 +25,8 @@ public class Dictionary2Activity extends AppCompatActivity implements View.OnCli
     //UI객체
     EditText etAddItem, etTodo_text;
     Button btnUpdate, btnInsert, btnDelete;
-    //Button btnQuery;   //검색버튼
-    TextView tvResult;
+    //Button btnQuery;   //검색버튼 - 사용x
+    RecyclerView rvTodayList;
 
     TextView tvTodo;
 
@@ -42,14 +43,14 @@ public class Dictionary2Activity extends AppCompatActivity implements View.OnCli
         btnInsert = findViewById(R.id.btnInsert);
         btnDelete = findViewById(R.id.btnDelete);
         btnUpdate = findViewById(R.id.btnUpdate);
-        //btnQuery = findViewById(R.id.btnQuery);   //검색버튼
+        //btnQuery = findViewById(R.id.btnQuery);   //검색버튼 - 사용x
 
-        //tvResult = findViewById(R.id.tvResult);
+        rvTodayList = findViewById(R.id.rvTodayList);   //메인-할일목록
         tvTodo = findViewById(R.id.tvTodo);
         tvTodo.setText((CharSequence) etTodo_text);
 
         //4개버튼 클릭시의 이벤트핸들러 설정
-        //btnQuery.setOnClickListener(this);    //검색버튼
+        //btnQuery.setOnClickListener(this);    //검색버튼 - 사용x
         btnInsert.setOnClickListener(this);
         btnUpdate.setOnClickListener(this);
         btnDelete.setOnClickListener(this);
@@ -141,16 +142,40 @@ public class Dictionary2Activity extends AppCompatActivity implements View.OnCli
             }
 */
             //데이터 추가
+
+            //다이얼로그에 있는 삽입버튼을 클릭
+            ButtonSubmit.setOnClickListener(new View.OnClickListener(){
+
+                @Override
+                public void onClick(View v) {
+                    //사용자 입력값 가져오기
+                    String strID = editTextID.getText().toString();
+                    String strTodo = editTextTodo.getText().toString();
+
+                    //ArrayList에 추가
+                    Dictionary dict = new Dictionary(strID, strEnglish, strKorean );
+                    mArrayList.add(0, dict); //첫번째 줄에 삽입됨
+                    //mArrayList.add(dict); //마지막 줄에 삽입됨
+
+                    // 6. 어댑터에서 RecyclerView에 반영하도록 합니다.
+                    mAdapter.notifyItemInserted(0);
+                    //mAdapter.notifyDataSetChanged();
+
+                    dialog.dismiss(); //다이얼로그 종료
+
+                }
+            })
+
             case R.id.btnInsert: {
                 //UI객체에서 입력한 값 가져오기
                 String todo = etAddItem.getText().toString();//"데이타베이스"
-                if (todo == null || todo.length() <= 0) {
+                if (todo == null || todo.length() <= 0) {   //필요없는 기능인가?
                     Toast.makeText(getApplicationContext(), "할 일을 입력하세요", Toast.LENGTH_SHORT).show();
                     break;
                 }
 
                 //dbHelper객체 생성
-                dbHelper = new DBHelper(getApplicationContext(), "dictionary.db", null, 1);
+                dbHelper = new DBHelper(getApplicationContext(), "todoDB.db", null, 1);
 
                 //dbHelper객체를 사용하여 데이타베이스 open
                 sqLiteDatabase = dbHelper.getWritableDatabase();
@@ -172,9 +197,13 @@ public class Dictionary2Activity extends AppCompatActivity implements View.OnCli
                 dbHelper.close();
 
                 if (newId != -1) {
-                    tvResult.setText(todo + " row가 1건 추가되었습니다.");
+                    rvTodayList.add(new PhRecyclerItem(R.drawable.emoji_u1f605, "emoji_u1f605 " + mItemList.size()));
+                    // List 반영
+                    rvTodayList.notifyDataSetChanged();
+
+                    //rvTodayList.setText(todo);
                 } else {
-                    tvResult.setText("내부적인 이유로 row를 추가하지 못했습니다.");
+                    rvTodayList.setText("내부적인 이유로 row를 추가하지 못했습니다.");
                 }
 
                 //다음 작업을 위해 UI입력객체의 값 reset
@@ -214,7 +243,7 @@ public class Dictionary2Activity extends AppCompatActivity implements View.OnCli
                         "todo = ?",
                         new String[]{""});
 
-                tvResult.setText(count + " 개의 row를 수정했습니다.");
+                rvTodayList.setText(count + " 개의 row를 수정했습니다.");
                 //close
                 sqLiteDatabase.close();
                 dbHelper.close();
@@ -225,7 +254,7 @@ public class Dictionary2Activity extends AppCompatActivity implements View.OnCli
                 break;
             }
             case R.id.btnDelete: {
-                //일치하는 한글단어를 찿아 해당 row를 제거
+                //일치하는 한글단어를 찿아 해당 row를 제거 => 선택한 항목 수정기능으로 변경
 
                 //UI객체에서 입력 한 값 가져오기
                 String todo = etAddItem.getText().toString(); //"웹프로그램"
@@ -249,7 +278,7 @@ public class Dictionary2Activity extends AppCompatActivity implements View.OnCli
                 whereArg[0] = "웹프로그램";
                 int count = sqLiteDatabase.delete("word", "todo = ?", whereArg);
                 //          sqLiteDatabase.delete("word", "kor = ?", new String[]{"프로젝트"});
-                tvResult.setText(count + " 개의 row를 삭제했습니다.");
+                rvTodayList.setText(count + " 개의 row를 삭제했습니다.");
 
                 //close
                 sqLiteDatabase.close();
@@ -281,7 +310,7 @@ public class Dictionary2Activity extends AppCompatActivity implements View.OnCli
         //테이블을 생성하는 메서드
         @Override
         public void onCreate(SQLiteDatabase db) {
-            //데이타베이스화일이 만들어지고 최초 open시만 호출된다.
+            //데이타베이스파일이 만들어지고 최초 open시만 호출된다.
 
             //sql명령어 작성
             String sql = "CREATE TABLE word( ";
