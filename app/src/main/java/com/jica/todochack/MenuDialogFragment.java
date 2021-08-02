@@ -48,6 +48,8 @@ public class MenuDialogFragment extends DialogFragment {
             }
         });
 
+        etAddItem = view.findViewById(R.id.etAddTodo);
+
         return view;
     }
 

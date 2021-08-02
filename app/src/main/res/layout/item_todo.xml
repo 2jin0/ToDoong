@@ -21,7 +21,7 @@
         />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/todo_info"
+        android:id="@+id/cbTodoDone"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
@@ -33,7 +33,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/etTodo_text"
+            android:id="@+id/tvTodoText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="TextView"

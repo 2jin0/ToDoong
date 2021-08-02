@@ -43,7 +43,7 @@ public class TodoAdapter extends RecyclerView.Adapter<TodoAdapter.ViewHolder>
         LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
 
         //항목뷰를 생성한다.(xml 디자인파일 ---> 객체 )
-        View itemView = inflater.inflate(R.layout.activity_item_todo, viewGroup, false);   //아래의 코드와 같은 코드(하위형 객체를 상위형 객체로 가르킬 수 있다는 점을 이용)
+        View itemView = inflater.inflate(R.layout.item_todo, viewGroup, false);   //아래의 코드와 같은 코드(하위형 객체를 상위형 객체로 가르킬 수 있다는 점을 이용)
         //LinearLayout linearLayout = (LinearLayout)inflater.inflate(R.layout.person_item, viewGroup, false);
 
         //전개 된 항목뷰를 직접 리턴하지 않고 반드시 ViewHolder객체로 만들어서 리턴해야한다.

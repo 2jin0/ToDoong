@@ -17,26 +17,30 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity {
     //Database
     SQLiteDatabase sqLiteDatabase;
-    SQLiteActivity.DBHelper dbHelper;
+    private DBHelper dbHelper;
 
     //UI객체
-    Button btnAddList, btnCalender; //mainActivity UI객체
-    RecyclerView rvTodayList;
-    TodoAdapter adapter;
+    private Button btnAddList, btnCalender;
+    private RecyclerView rvTodayList;
+    private TodoAdapter adapter;
+    private ArrayList<TodoItem> todoItems;
 
-    EditText etAddItem, etTodo_text;
+    private EditText etAddItem, etTodo_text;
     TextView tvResult;
 
     Button ivTodoMenu;
 
-    @SuppressLint("WrongViewCast")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        setInit();
 
 
         //+버튼 클릭시 할 일 추가 바텀씨트 호출
@@ -49,49 +53,94 @@ public class MainActivity extends AppCompatActivity {
                 Log.d("TAG", "+버튼 클릭합니다.");
 
                 //키보드 자동 띄우기
-                InputMethodManager imManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE); //error: 인자가 두개 필요하대????
+                InputMethodManager imManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE); //error: 인자가 두개 필요하대???? <-해결
                 imManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
 
             }
         });
-/*
-        //xml UI를 전개하여 액티비티 연결
-        setContentView(R.layout.activity_item_todo);
 
-        //UI객체 얻기
-        rvTodayList = findViewById(R.id.rvTodayList);
-
-        //RecyclerView의 보여주기 설정(LinearView형태 - LinearLayoutManager)
-        //                          (GridView 형태 - GridLayoutManager)
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-        //GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
-        rvTodayList.setLayoutManager(layoutManager);    //NullPointException....
-
-        //커스텀 어댑터 객체를 생성
-        //커스텀 어뎁터 객체는 원본데이터를 직접 관리하고
-        //리사이클러뷰와 상호작용을 하면서 원본데이터 1개 항목을 항목뷰로 만들어서 전달한다.
-        //adapter = new PersonAdapterOld();
-        adapter = new TodoAdapter();
-
-        //어댑터 내부에서 직접 원본 데이터를 관리하도록 했다.
-        adapter.addItem(new Todo("메모메모메모"));
- */
+        //...(메뉴)버튼 클릭시 doalog 호출
         ivTodoMenu = findViewById(R.id.ivTodoMenu);
         ivTodoMenu.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
                 MenuDialogFragment menuDialogFragment = new MenuDialogFragment();
                 menuDialogFragment.show(getSupportFragmentManager(), menuDialogFragment.getTag());
 
                 Button btnUpdate, btnDelete, btnCancel_dialog;
-                //TextView tvTodo = editTextID.getText().toString();  //사용자가 입력 한 값 가져오기?
+                TextView tvTodo = editTextID.getText().toString();  //사용자가 입력 한 값 가져오기?
 
-                btnUpdate = findViewById(R.id.btnUpdate);       //수정버튼 -- 클릭시 할일추가란(기존입력내용보여짐)으로 이동.
+                //수정버튼 -- 클릭시 할일추가란(기존입력내용보여짐)으로 이동.
+                btnUpdate = findViewById(R.id.btnUpdate);
+                btnUpdate.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        View dialogView = getLayoutInflater().inflate(R.layout.fragment_bottom_sheet, null);    //수정페이지 출력
+                        final PhRecyclerItem recyclerItem = mRecyclerAdapter.getSelected();
+
+                        // Recycler item 수정
+                        recyclerItem.setName(recyclerItem.getName() + " is modified");
+
+                        // 선택 항목 초기화
+                        mRecyclerAdapter.clearSelected();
+
+                        // List 반영
+                        mRecyclerAdapter.notifyDataSetChanged();
+
+                        alertDialog.dismiss();  //다이얼로그 닫기
+                    }
+                });
+
                 btnDelete = findViewById(R.id.btnDelete);       //삭제버튼 -- 클릭시 목록 삭제
-                btnCancel_dialog = findViewById(R.id.btnCancel_dialog); //취소버튼 -- 다이얼로그 종료
-                //tvTodo.setText((CharSequence) tvTodo);
+                btnDelete.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        //Dialog - 투두리스트 수정/삭제
+                        View dialogView = getLayoutInflater().inflate(R.layout.dialog_menu, null);
 
+                        AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+                        builder.setView(dialogView);
+
+                        final AlertDialog alertDialog = builder.create();
+                        alertDialog.show();
+                    }
+                });
+                btnCancel_dialog = findViewById(R.id.btnCancel_dialog); //취소버튼 -- 다이얼로그 종료
+                btnCancel_dialog.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        alertDialog.dismiss();  //다이얼로그 닫기
+                    }
+                });
+                //tvTodo.setText((CharSequence) tvTodo);
+            }
+        });
+
+    }
+
+    private void setInit(){
+        dbHelper = new DBHelper(this);
+        rvTodayList = findViewById(R.id.rvTodayList);
+        btnAddList = findViewById(R.id.btnAddList);
+        todoItems = new ArrayList<>();
+
+        btnAddList.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+                //팝업창 띄우기
+                BottomSheetFragment bottomSheet = new BottomSheetFragment();
+                bottomSheet.show(getSupportFragmentManager(), bottomSheet.getTag());
+                Log.d("TAG", "+버튼 클릭합니다.");
+
+                //UI객체 찾기
+                Button btnInsert = findViewById(R.id.btnInsert);
+                Button btnCancel_bs = dialog.findViewById(R.id.btnCancel_bs);
+                EditText etAddTodo = bottomSheet.findViewById(R.id.etAddTodo);
+
+                //키보드 자동 띄우기
+                InputMethodManager imManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE); //error: 인자가 두개 필요하대???? <-해결
+                imManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
 
             }
         });
@@ -100,12 +149,8 @@ public class MainActivity extends AppCompatActivity {
 
     //다이얼로그 호출할 버튼 누르는 setOnClickListener 필요하지않나? 왜 오류나지?
     //===> 시험해보려면 데이터가 필요함 ==> SQLite부터 해야함
-    /*
-        //...(메뉴)버튼 클릭시 doalog 호출
-        ivTodoMenu = findViewById(R.id.ivTodoMenu);
-        ivTodoMenu.setOnClickListener(new View.OnClickListener() {
-        }
-     */
+
+/*
     public void custom_dialog(View view) {
         //Dialog - 투두리스트 수정/삭제
         View dialogView = getLayoutInflater().inflate(R.layout.dialog_menu, null);
@@ -122,6 +167,17 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 View dialogView = getLayoutInflater().inflate(R.layout.fragment_bottom_sheet, null);    //수정페이지 출력
+                final PhRecyclerItem recyclerItem = mRecyclerAdapter.getSelected();
+
+                // Recycler item 수정
+                recyclerItem.setName(recyclerItem.getName() + " is modified");
+
+                // 선택 항목 초기화
+                mRecyclerAdapter.clearSelected();
+
+                // List 반영
+                mRecyclerAdapter.notifyDataSetChanged();
+
                 alertDialog.dismiss();  //다이얼로그 닫기
             }
         });
@@ -131,6 +187,7 @@ public class MainActivity extends AppCompatActivity {
         btnDel_dialog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                deleteThisView();
                 alertDialog.dismiss();  //다이얼로그 닫기
             }
         });
@@ -144,6 +201,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+ */
 
 /*
     //모달상자 - 사용안함
@@ -168,7 +227,6 @@ public class MainActivity extends AppCompatActivity {
         //.setCancelable(false) // 백버튼으로 팝업창이 닫히지 않도록 한다.
     }
 
- */
 
 
 
@@ -186,8 +244,7 @@ public class MainActivity extends AppCompatActivity {
         public ViewModelProvider.Factory getDefaultViewModelProviderFactory () {
         return null;
     }
-    }
-                .
+
 
     get(TodoAdapter));
 
@@ -203,6 +260,11 @@ public class MainActivity extends AppCompatActivity {
 
     }
     });
- */
 
+    public void removeItem(int position){
+        rvTodayList.remove(position);
+        notifyItemRemoved(position);
+        notifyDataSetChanged();
+    }
+ */
 }

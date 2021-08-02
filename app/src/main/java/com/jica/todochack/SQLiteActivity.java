@@ -17,15 +17,17 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.Dictionary;
+
 public class SQLiteActivity extends AppCompatActivity implements View.OnClickListener {
+
     //Database
     SQLiteDatabase sqLiteDatabase;
     DBHelper dbHelper;
 
     //UI객체
-    EditText etAddItem, etTodo_text;
+    EditText etAddItem, etAddTodo, etTodo_text;
     Button btnUpdate, btnInsert, btnDelete;
-    //Button btnQuery;   //검색버튼 - 사용x
     RecyclerView rvTodayList;
 
     TextView tvTodo;
@@ -39,6 +41,7 @@ public class SQLiteActivity extends AppCompatActivity implements View.OnClickLis
 
         //UI객체 찾기
         etAddItem = findViewById(R.id.etAddTodo);
+        //etAddItem = findViewById(R.id.etTodo_text);
 
         btnInsert = findViewById(R.id.btnInsert);
         btnDelete = findViewById(R.id.btnDelete);
@@ -50,7 +53,6 @@ public class SQLiteActivity extends AppCompatActivity implements View.OnClickLis
         tvTodo.setText((CharSequence) etTodo_text);
 
         //4개버튼 클릭시의 이벤트핸들러 설정
-        //btnQuery.setOnClickListener(this);    //검색버튼 - 사용x
         btnInsert.setOnClickListener(this);
         btnUpdate.setOnClickListener(this);
         btnDelete.setOnClickListener(this);
@@ -64,107 +66,42 @@ public class SQLiteActivity extends AppCompatActivity implements View.OnClickLis
 
         int curId = view.getId();
         switch (curId) {
-/*          
-            // 검색기능  
-            case R.id.btnQuery :{
-                //UI객체에서 입력 한 값 가져오기
-                String kor = etAddItem.getText().toString(); //""
 
-
-                //모든 데이타 가져오기
-                //dbHelper객체 생성
-                dbHelper = new DBHelper(getApplicationContext(), "dictionary.db", null, 1);
-
-                //dbHelper객체를 사용하여 데이타베이스 open
-                sqLiteDatabase = dbHelper.getReadableDatabase();
-
-                Cursor cursor = null;
-
-                //SQL명령 ==> SELECT * FROM word
-                Log.d("TAG", "모든 row를 가져오는 기능을 query()메서드 사용하여 실행");
-                // sql 명령을 직접 실행할때
-                //cursor = sqLiteDatabase.rawQuery("SELECT _id, kor, eng FROM word WHERE SUBSTR(eng, 1, 1) = 'j'", null);
-
-                //query()메서드의 사용법
-                //Cursor	query(String table,
-                //                String[] columns,
-                //                String selection,
-                //                String[] selectionArgs,
-                //                String groupBy,
-                //                String having,
-                //                String orderBy)
-
-                
-//                cursor = sqLiteDatabase.query("word",
-//                                              new String[]{"_id","kor","eng"},
-//                                              "SUBSTR(eng, 1, 1) = ?",
-//                                                       new String[]{"j"},
-//                                               null,
-//                                                null,
-//                                               null);
-                 
-                cursor = sqLiteDatabase.query("word",
-                                            null,
-                                            null,
-                                            null,
-                                            null,
-                                            null,
-                                            null);
-
-                //Cursor 0x100 ----> bof
-                //                   1 바보팅               BABOTING
-                //                   2 자바                java
-                //                   3 안드로이드           ANDROID
-                //                   5 전주정보문화산업진흥원 JICA
-                //                   6 코틀린              kotlien
-                //                   7 전주                jeonju
-                //                   8 웹프로그래밍          web
-
-                String result = "";
-                while(cursor.moveToNext()){
-                    int _id = cursor.getInt(0);
-                    String ckor = cursor.getString(1);
-                    String ceng = cursor.getString(2);
-                    result += _id +  "," + ckor +"," + ceng +"\n";
-                }
-
-                if(result.length() == 0){
-                    result = " 1건의 row도 존재하지 않습니다.";
-                }
-                tvResult.setText(result);
-
-                //close
-                cursor.close();
-                sqLiteDatabase.close();
-                dbHelper.close();
-                break;
-
-            }
-*/
             //데이터 추가
-
-            //다이얼로그에 있는 삽입버튼을 클릭
-            ButtonSubmit.setOnClickListener(new View.OnClickListener(){
+            //다이얼로그에 있는 삽입버튼을 클릭하면
+            btnInsert.setOnClickListener(new View.OnClickListener() {
 
                 @Override
                 public void onClick(View v) {
                     //사용자 입력값 가져오기
-                    String strID = editTextID.getText().toString();
-                    String strTodo = editTextTodo.getText().toString();
+                    String strTodo = etAddTodo.getText().toString();
+
+                    //dbHelper객체 생성
+                    dbHelper = new DBHelper(getApplicationContext(), "dictionary.db", null, 1);
+
+                    //dbHelper객체를 사용하여 데이타베이스 open
+                    sqLiteDatabase = dbHelper.getWritableDatabase();
+
+                    // List 반영
+                    rvTodayList.notifyDataSetChanged();
 
                     //ArrayList에 추가
-                    Dictionary dict = new Dictionary(strID, strEnglish, strKorean );
-                    mArrayList.add(0, dict); //첫번째 줄에 삽입됨
-                    //mArrayList.add(dict); //마지막 줄에 삽입됨
+                    Dictionary dict = new Dictionary(strTodo);
+                    rvTodayList.add(0, dict); //첫번째 줄에 삽입됨
+                    //mArrayList.add(dict);  //마지막 줄에 삽입됨
 
                     // 6. 어댑터에서 RecyclerView에 반영하도록 합니다.
-                    mAdapter.notifyItemInserted(0);
+                    rvTodayList.notifyItemInserted(0);
                     //mAdapter.notifyDataSetChanged();
 
                     dialog.dismiss(); //다이얼로그 종료
 
+
                 }
-            })
+            });
+
+
+
 
             case R.id.btnInsert: {
                 //UI객체에서 입력한 값 가져오기
@@ -329,6 +266,7 @@ public class SQLiteActivity extends AppCompatActivity implements View.OnClickLis
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
         }
-    }
 
+
+    }
 }
