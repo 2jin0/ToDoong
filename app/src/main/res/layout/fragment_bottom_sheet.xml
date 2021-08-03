@@ -57,7 +57,7 @@
     </EditText>
 
     <Button
-        android:id="@+id/btnInsert"
+        android:id="@+id/btnOk_bs"
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:layout_marginTop="16dp"

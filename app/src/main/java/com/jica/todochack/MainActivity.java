@@ -1,15 +1,12 @@
 package com.jica.todochack;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.app.Dialog;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -17,7 +14,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
     //Database
@@ -42,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
 
         setInit();
 
-
+/*
         //+버튼 클릭시 할 일 추가 바텀씨트 호출
         btnAddList = findViewById(R.id.btnAddList);
         btnAddList.setOnClickListener(new View.OnClickListener() {
@@ -116,6 +115,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+ */
+
     }
 
     private void setInit(){
@@ -127,21 +128,35 @@ public class MainActivity extends AppCompatActivity {
         btnAddList.setOnClickListener(new View.OnClickListener(){
 
             @Override
-            public void onClick(View v) {
+            public void onClick(View view) {
                 //팝업창 띄우기
                 BottomSheetFragment bottomSheet = new BottomSheetFragment();
                 bottomSheet.show(getSupportFragmentManager(), bottomSheet.getTag());
                 Log.d("TAG", "+버튼 클릭합니다.");
 
                 //UI객체 찾기
-                Button btnInsert = findViewById(R.id.btnInsert);
-                Button btnCancel_bs = dialog.findViewById(R.id.btnCancel_bs);
-                EditText etAddTodo = bottomSheet.findViewById(R.id.etAddTodo);
+                Button btnOk_bs = findViewById(R.id.btnOk_bs);
+                Button btnCancel_bs = findViewById(R.id.btnCancel_bs);
+                EditText etAddTodo = findViewById(R.id.etAddTodo);
+                btnOk_bs.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        // Insert Database
+                        String currentTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());    //현재 시간 연월일시분초 받아오기
+                        //DBHelper.InsertTodo(etAddTodo.getText().toString(), currentTime);
+
+                        //Insert UI
+
+
+
+                    }
+                });
 
                 //키보드 자동 띄우기
                 InputMethodManager imManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE); //error: 인자가 두개 필요하대???? <-해결
                 imManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
 
+                //dialog.show();
             }
         });
 

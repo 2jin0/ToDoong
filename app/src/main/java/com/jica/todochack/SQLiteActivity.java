@@ -2,7 +2,6 @@ package com.jica.todochack;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
@@ -18,7 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.Dictionary;
-
+/*
 public class SQLiteActivity extends AppCompatActivity implements View.OnClickListener {
 
     //Database
@@ -43,7 +42,7 @@ public class SQLiteActivity extends AppCompatActivity implements View.OnClickLis
         etAddItem = findViewById(R.id.etAddTodo);
         //etAddItem = findViewById(R.id.etTodo_text);
 
-        btnInsert = findViewById(R.id.btnInsert);
+        btnInsert = findViewById(R.id.btnOk_bs);
         btnDelete = findViewById(R.id.btnDelete);
         btnUpdate = findViewById(R.id.btnUpdate);
         //btnQuery = findViewById(R.id.btnQuery);   //검색버튼 - 사용x
@@ -103,7 +102,7 @@ public class SQLiteActivity extends AppCompatActivity implements View.OnClickLis
 
 
 
-            case R.id.btnInsert: {
+            case R.id.btnOk_bs: {
                 //UI객체에서 입력한 값 가져오기
                 String todo = etAddItem.getText().toString();//"데이타베이스"
                 if (todo == null || todo.length() <= 0) {   //필요없는 기능인가?
@@ -269,4 +268,7 @@ public class SQLiteActivity extends AppCompatActivity implements View.OnClickLis
 
 
     }
+
+
 }
+ */

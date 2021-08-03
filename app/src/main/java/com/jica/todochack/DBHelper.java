@@ -10,43 +10,22 @@ import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
 
-//SQLiteOpenHelper를 상속받은 클래스
 public class DBHelper extends SQLiteOpenHelper {
+
     private static final int DB_VERSION = 1;
-    private static final String DB_NAME = "toodong.db";
+    private static final String DB_NAME = "todoong.db";
 
-    public DBHelper(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version) {
-        //첫번째 인자값 contxt : ApplictionContext
-        //두번째 인자값 name   : 데이타베이스화일명
-        //세번째 인자값 factory : null
-        //네번째 인자값 version : 버전(구조가 바뀔때 사용)
-        super(context, name, factory, version);
-        //위의 코드가 최초로 작동할때는 내부에서 데이타베이스화일이 생성된다.
-        //이후 호출시부터는 생성되지 않는다.
-
-        Log.d("TAG", "DBHelper::DBHelper()-->데이타베이스 생성준비(데이타베이스화일이 없으면 생성");
+    public DBHelper(@Nullable Context context) {
+        super(context, DB_NAME, null, DB_VERSION);
     }
 
-    //테이블을 생성하는 메서드 -- 반드시 재정의해야하는 메서드
     @Override
     public void onCreate(SQLiteDatabase db) {
-        //데이타베이스화일이 만들어지고 최초 open시만 호출된다.
-        //데이터베이스 -> 테이블 -> 값
-        db.execSQL("CREATE TABLE IF NOT EXISTS TodoList (id INTEGER PRIMARY KEY AUTOINCREMENT, content TEXT NOT NULL)");
-
-        //sql명령어 작성
-        String sql = "CREATE TABLE word( ";
-        sql += "_id INTEGER PRIMARY KEY AUTOINCREMENT,";
-        sql += "todo TEXT,";
-        sql += ");";
-
-        //sql명령어 실행
-        db.execSQL(sql);
-
-        Log.d("TAG", "DBOpenHeler::onCreate()--> word 테이블 생성");
+        // 데이터베이스가 생성이 될 때 호출
+        //데이터베이스 -> 테이블 -> 컬럼 -> 값
+        db.execSQL("CREATE TABLE IF NOT EXISTS TodoList (id INTEGER PRIMARY KEY AUTOINCREMENT, content TEXT NOT NULL, writeData Text NOT NULL)");
     }
 
-    //-- 반드시 재정의해야하는 메서드
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         onCreate(db);
@@ -82,16 +61,16 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     //UPDATE 문(할일 목록을 수정한다.)
-    public void UpdateTodo(String _content, String _writDate, int _id) {
+    public void UpdateTodo(String _content, String _writDate, String _beforeDate) {
         SQLiteDatabase db = getWritableDatabase();
-        db.execSQL("UPDATE TodoList SET content='" + _content + "', writDate='" + _writDate + "' WHERE id='" + _id + "'");   //id를 이용해서 순서?를 알아봄
+        db.execSQL("UPDATE TodoList SET content='" + _content + "', writDate='" + _writDate + "' WHERE writDate='" + _beforeDate + "'");   //id를 이용해서 순서?를 알아봄
 
     }
 
     //DELETE 문 (할일 목록을 제거한다.)
-    public void DeleteTodo(int _id) {
+    public void DeleteTodo(String _beforeDate) {
         SQLiteDatabase db = getWritableDatabase();
-        db.execSQL("DELETE FROM TodoList WHERE id = '" + _id + "'");
+        db.execSQL("DELETE FROM TodoList WHERE writDate='" + _beforeDate + "'");
     }
 
     //이후의 메서드는 db관련 기능을 지원하기 위한 사용자가 만든 메서드
@@ -128,30 +107,4 @@ public class DBHelper extends SQLiteOpenHelper {
 
     }
 
-    //용도에 따라 다양한 메서드를 여기에 작성해 놓고 호출하여 사용하면
-    //코드도 단순해지고 사용하기도 편리하다.
-    ArrayList<String> queryKorWord(String todo) {
-        SQLiteDatabase db = getReadableDatabase();
-        String sql = "SELECT _id, todo FROM word WHERE todo = '" + todo + "'";
-        Cursor cursor = db.rawQuery(sql, null);
-
-        //결과가 여러건일 경우를 대비하여 ArrayList를 준비한다.
-        ArrayList<String> result = new ArrayList<String>();
-        if (cursor.getCount() == 0) {
-            result.add("결과 데이타가 없습니다.");
-        } else {
-            while (cursor.moveToNext()) {
-                int _id = cursor.getInt(0);        //_id
-                String ctodo = cursor.getString(1); //kor
-
-                String message = String.format("%-3d|%-20s|%-20s", _id, ctodo);
-                result.add(message);
-            }
-        }
-
-        cursor.close();
-        db.close();
-
-        return result;
-    }
 }
