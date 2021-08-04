@@ -13,6 +13,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -21,13 +22,14 @@ import java.util.Date;
 public class MainActivity extends AppCompatActivity {
     //Database
     SQLiteDatabase sqLiteDatabase;
-    private DBHelper dbHelper;
+    private DBHelper mDBHelper;
+    private CustomAdapter mAdapter;
 
     //UI객체
     private Button btnAddList, btnCalender;
     private RecyclerView rvTodayList;
-    private TodoAdapter adapter;
-    private ArrayList<TodoItem> todoItems;
+    //private TodoAdapter adapter;
+    private ArrayList<TodoItem> mTodoItems;
 
     private EditText etAddItem, etTodo_text;
     TextView tvResult;
@@ -119,14 +121,16 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void setInit(){
-        dbHelper = new DBHelper(this);
+    private void setInit() {
+        mDBHelper = new DBHelper(this);
         rvTodayList = findViewById(R.id.rvTodayList);
         btnAddList = findViewById(R.id.btnAddList);
-        todoItems = new ArrayList<>();
+        mTodoItems = new ArrayList<>();
 
-        btnAddList.setOnClickListener(new View.OnClickListener(){
+        //load recent Database
+        loadRecentDB();
 
+        btnAddList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //팝업창 띄우기
@@ -142,12 +146,17 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
                         // Insert Database
-                        String currentTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());    //현재 시간 연월일시분초 받아오기
-                        //DBHelper.InsertTodo(etAddTodo.getText().toString(), currentTime);
+                        //String currentTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());    //현재 시간 연월일시분초 받아오기
+                        DBHelper.InsertTodo(etAddTodo.getText().toString()); //, currentTime - 시간 필요없어!
 
                         //Insert UI
+                        TodoItem item = new TodoItem();
+                        item.setContent(etAddTodo.getText().toString());
 
-
+                        mAdapter.addItem(item);
+                        rvTodayList.smoothScrollToPosition(0);
+                        //dialog.dicmiss();
+                        Toast.makeText(MainActivity.this, "할일 목록에 추가 되었습니다.", Toast.LENGTH_SHORT).show();
 
                     }
                 });
@@ -160,6 +169,16 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void loadRecentDB() {
+        //저장되어있던 DB를 가져온다.
+        mTodoItems = mDBHelper.geTodoList();
+        if (mAdapter == null) {
+            mAdapter = new CustomAdapter(mTodoItems, this);
+            rvTodayList.setHasFixedSize(true);
+            rvTodayList.setAdapter(mAdapter);
+        }
     }
 
     //다이얼로그 호출할 버튼 누르는 setOnClickListener 필요하지않나? 왜 오류나지?
