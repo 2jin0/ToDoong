@@ -39,13 +39,15 @@ public class DBHelper extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery("SELECT * FROM TodoList ORDER BY writeData DESC", null);
         if (cursor.getCount() != 0) {
             //조회온 데이터가 있을때 내부 수행
-            while (cursor.moveToNext()) {
-                int id = cursor.getInt(cursor.getColumnIndex("id"));
+            while (cursor.moveToNext()) {   //다음으로 이동할 데이터가 있을때까지
+                int id = cursor.getInt(cursor.getColumnIndex("id"));    // 체크박스, 메뉴버튼 추가?
                 String content = cursor.getString(cursor.getColumnIndex("content"));
+                String writeDate = cursor.getString(cursor.getColumnIndex("writeDate"));
 
                 TodoItem todoItem = new TodoItem();
                 todoItem.setId(id);
                 todoItem.setContent(content);
+                todoItem.setWriteDate(writeDate);
                 todoItems.add(todoItem);
             }
         }
@@ -57,7 +59,7 @@ public class DBHelper extends SQLiteOpenHelper {
     //INSERT문(할일 목록을 DB에 넣는다.)
     public void InsertTodo(String _content, String _writDate) {
         SQLiteDatabase db = getWritableDatabase();
-        db.execSQL("INSERT INTO TodoList (content, writDate) VALUES('" + _content + "', '" + _writDate + "');");   //JAVA언어가 아니라 SQL언어
+        db.execSQL("INSERT INTO TodoList (content, writDate) VALUES('" + _content + "', '" + _writDate + "');");   //JAVA언어가 아니라 SQL명령어
     }
 
     //UPDATE 문(할일 목록을 수정한다.)

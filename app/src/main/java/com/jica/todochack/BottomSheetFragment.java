@@ -58,7 +58,7 @@ public class BottomSheetFragment extends BottomSheetDialogFragment {
 
         etAddItem = view.findViewById(R.id.etAddTodo);
 
-       //x버튼 클릭시 fragment_bottom_sheet 종료
+        //x버튼 클릭시 fragment_bottom_sheet 종료
         //Fragment에서 findViewById를 입력하면 오류가 난다.
         //Fragment의 view가 inflate하기전에 컴포넌트를 호출하기 때문이다
         //https://brightmango.tistory.com/39

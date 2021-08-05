@@ -14,8 +14,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -106,9 +109,9 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
                             dialogMenu.dismiss();
 
                             //팝업창-bottomSheet
-                            BottomSheetFragment bottomSheet = new BottomSheetFragment();
-                            bottomSheet.show(getSupportFragmentManager(), bottomSheet.getTag());
-                            Log.d("TAG", "+버튼 클릭합니다.");
+                            BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(mContext);
+                            bottomSheetDialog.setContentView(R.layout.layout_bottom_sheet);
+                            Log.d("TAG", "수정 버튼을 클릭했습니다.");
 
                             //할일 목록 텍스트 가져오기
                             et_AddTodo.setText((todoItem.getContent()));

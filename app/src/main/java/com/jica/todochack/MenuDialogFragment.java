@@ -32,7 +32,7 @@ public class MenuDialogFragment extends DialogFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_menu_dialog, container, false);
+        View view = inflater.inflate(R.layout.dialog_menu, container, false);
 
         etAddItem = view.findViewById(R.id.etAddTodo);
 

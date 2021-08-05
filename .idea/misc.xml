@@ -3,15 +3,20 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Work/AndroidWork/TodoChack/app/src/main/res/drawable-v24/corner_shape_bottom_sheet.xml" value="0.53125" />
+        <entry key="..\:/Work/AndroidWork/TodoChack/app/src/main/res/drawable-v24/corner_shape_main.xml" value="0.53125" />
+        <entry key="..\:/Work/AndroidWork/TodoChack/app/src/main/res/drawable/bottom_sheet_background.xml" value="0.1328125" />
+        <entry key="..\:/Work/AndroidWork/TodoChack/app/src/main/res/drawable/corner_shape.xml" value="0.53125" />
         <entry key="..\:/Work/AndroidWork/TodoChack/app/src/main/res/layout/activity_calendar.xml" value="0.54921875" />
         <entry key="..\:/Work/AndroidWork/TodoChack/app/src/main/res/layout/activity_item_todo.xml" value="0.54921875" />
         <entry key="..\:/Work/AndroidWork/TodoChack/app/src/main/res/layout/activity_main.xml" value="0.41883116883116883" />
         <entry key="..\:/Work/AndroidWork/TodoChack/app/src/main/res/layout/activity_splash.xml" value="0.54921875" />
         <entry key="..\:/Work/AndroidWork/TodoChack/app/src/main/res/layout/dialog_menu.xml" value="0.54921875" />
-        <entry key="..\:/Work/AndroidWork/TodoChack/app/src/main/res/layout/fragment_bottom_sheet.xml" value="0.54921875" />
+        <entry key="..\:/Work/AndroidWork/TodoChack/app/src/main/res/layout/fragment_bottom_sheet.xml" value="0.5" />
         <entry key="..\:/Work/AndroidWork/TodoChack/app/src/main/res/layout/fragment_menu_dialog.xml" value="0.54921875" />
         <entry key="..\:/Work/AndroidWork/TodoChack/app/src/main/res/layout/fragment_menu_modal.xml" value="0.54921875" />
         <entry key="..\:/Work/AndroidWork/TodoChack/app/src/main/res/layout/item_todo.xml" value="0.47421875" />
+        <entry key="..\:/Work/AndroidWork/TodoChack/app/src/main/res/layout/layout_bottom_sheet.xml" value="0.5" />
       </map>
     </option>
   </component>
