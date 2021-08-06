@@ -13,9 +13,10 @@ import java.util.ArrayList;
 import static android.graphics.Paint.STRIKE_THRU_TEXT_FLAG;
 
 public class MyAdapter {
+/*
     Context context;
     ArrayList itemList;
-/*
+
 
     public void onCreateViewHolder(RecyclerView.Adapter<MyAdapter.MyViewHolder>()) {
         Context inflater = LayoutInflater.from(parent.context);

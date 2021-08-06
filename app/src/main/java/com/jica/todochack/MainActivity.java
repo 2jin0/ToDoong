@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,10 +25,9 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
-    //전역변수 - m붙일까말까
+    //전역변수
 
     //Database
-    //SQLiteDatabase sqLiteDatabase;
     private DBHelper mDBHelper;
     private CustomAdapter mAdapter;
 
@@ -36,11 +36,12 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView mRvTodayList;
     //private TodoAdapter adapter;
     private ArrayList<TodoItem> mTodoItems;
+    private CheckBox todo_done;
 
     private EditText etAddItem, etTodo_text;
-    TextView tvResult;
+    //TextView tvResult;
 
-    Button ivTodoMenu;
+    //Button ivTodoMenu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,11 +72,13 @@ public class MainActivity extends AppCompatActivity {
                 View bottomSheetView = LayoutInflater.from(getApplicationContext())
                         .inflate(R.layout.layout_bottom_sheet,
                                 (ConstraintLayout) findViewById(R.id.bottomSheetContainer));
+                //int curPos = getAdapterPosition();  //현재 리스트 클릭한 아이템 위치
+                //TodoItem todoItem = mTodoItems.get(curPos);
 
                 //UI객체 찾기
-                Button btnOk_bs = findViewById(R.id.btnOk_bs);
-                Button btnCancel_bs = findViewById(R.id.btnCancel_bs);
-                EditText etAddTodo = findViewById(R.id.etAddTodo);
+                final Button btnOk_bs = bottomSheetView.findViewById(R.id.btnOk_bs);
+                final Button btnCancel_bs = bottomSheetView.findViewById(R.id.btnCancel_bs);
+                final EditText etAddTodo = bottomSheetView.findViewById(R.id.etAddTodo);
 
                 //v버튼 클릭시 할일 등록
                 bottomSheetView.findViewById(R.id.btnOk_bs).setOnClickListener(new View.OnClickListener() {
@@ -83,7 +86,9 @@ public class MainActivity extends AppCompatActivity {
                     public void onClick(View view) {
                         // Insert Database
                         String currentTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());    //현재 시간 연월일시분초 받아오기
-                        mDBHelper.InsertTodo(etAddTodo.getText().toString(), currentTime); //, currentTime - 시간 필요없어!
+
+                        Log.d("TextTextTextTextTextTextTextTextText", mDBHelper.toString());
+                        mDBHelper.InsertTodo(etAddTodo.getText().toString().trim(), currentTime);
 
                         //Insert UI
                         TodoItem item = new TodoItem();
@@ -114,12 +119,13 @@ public class MainActivity extends AppCompatActivity {
 
     private void loadRecentDB() {
         //저장되어있던 DB를 가져온다.
-        mTodoItems = mDBHelper.geTodoList();
+        mTodoItems = mDBHelper.getTodoList();
         if (mAdapter == null) {
             mAdapter = new CustomAdapter(mTodoItems, this);
             mRvTodayList.setHasFixedSize(true);
             mRvTodayList.setAdapter(mAdapter);
         }
     }
+
 
 }

@@ -73,7 +73,6 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
             ivTodoMenu = itemView.findViewById(R.id.ivTodoMenu);
             todo_done = itemView.findViewById(R.id.todo_done);
 
-
             //RecyclerView의 ...버큰 클릭시
             ivTodoMenu.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -85,7 +84,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
                     Dialog dialogMenu = new Dialog(mContext);
                     dialogMenu.setContentView(R.layout.dialog_menu);
                     Log.d("TAG", "...버튼 클릭합니다.");
-                    
+
                     //할일 추가란-바텀시트에 있는 에딧텍스트 -> 리사이클러뷰의 할일내용으로
                     EditText et_AddTodo = dialogMenu.findViewById(R.id.tvTodoText);
 
@@ -130,7 +129,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
                             todoItem.setContent(content);
                             todoItem.setWriteDate(currentTime);
                             notifyItemChanged(curPos, todoItem);
-                            Toast.makeText(mContext, "목록 수정이 완료 되었습니다.", Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(mContext, "목록 수정이 완료 되었습니다.", Toast.LENGTH_SHORT).show();
 
                         }
                     });
@@ -143,7 +142,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
                         public void onClick(View v) {
                             // delete table
                             String beforeTime = todoItem.getWriteDate();
-                            mDBHelper.deleteTodo(beforeTime);
+                            mDBHelper.DeleteTodo(beforeTime);
                             // delete UI
                             mTodoItems.remove(curPos);
                             notifyItemRemoved(curPos);
@@ -160,7 +159,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
     //액티비티에서 호출되는 함수이며, 현재 어댑터에 새로운 게시글 아이템을 전달받아 추가하는 목적
     public void addItem(TodoItem _item) {
         mTodoItems.add(0, _item);   //항상 최신 데이터가 0번째에 더해짐
-        notifyItemInserted(0);    //notify 들어간거는 새로고침이라 생각하면 된다.
+        notifyItemInserted(0);    //notify 들어간건 새로고침이라 생각하면 된다.
 
     }
 }
