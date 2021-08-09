@@ -65,12 +65,12 @@ public class DBHelper extends SQLiteOpenHelper {
     //UPDATE 문(할일 목록을 수정한다.)
     public void UpdateTodo(String _content, String _writeDate, String _beforeDate) {
         SQLiteDatabase db = getWritableDatabase();
-        db.execSQL("UPDATE TodoList SET content='" + _content + "', writDate='" + _writeDate + "' WHERE writeDate='" + _beforeDate + "'");   //id를 이용해서 순서?를 알아봄
+        db.execSQL("UPDATE TodoList SET content='" + _content + "', writeDate='" + _writeDate + "' WHERE writeDate='" + _beforeDate + "'");   //id를 이용해서 순서?를 알아봄
 
     }
 
     //DELETE 문 (할일 목록을 제거한다.)
-    public void DeleteTodo(String _beforeDate) {
+    public void DeleteTodo(String _beforeDate) {    //String _beforeDate
         SQLiteDatabase db = getWritableDatabase();
         db.execSQL("DELETE FROM TodoList WHERE writeDate='" + _beforeDate + "'");
     }
