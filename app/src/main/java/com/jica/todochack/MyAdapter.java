@@ -18,15 +18,17 @@ public class MyAdapter {
     ArrayList itemList;
 
 
-    public void onCreateViewHolder(RecyclerView.Adapter<MyAdapter.MyViewHolder>()) {
+    public void onCreateViewHolder(RecyclerView.Adapter<MyAdapter.MyViewHolder>())
+
+    {
         Context inflater = LayoutInflater.from(parent.context);
-        View view = inflater.inflate(R.layout.item_todo,parent,false);
+        View view = inflater.inflate(R.layout.item_todo, parent, false);
 
         return MyViewHolder(view);
 
     }
 
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position){
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         //position번째에 해당하는 Todo객체 얻기
         int todo = itemList(position);
 
@@ -35,9 +37,9 @@ public class MyAdapter {
         //todo객체의 isDone을 CheckBox의 isChecked에 set해준다.
         holder.todoIsDone.isChecked = todo.isDone;
 
-        //todo가 완료(done)된 상태라면 todo_text의 글자섹 변경
-        if(todo.isDone){
-            holder.todoText.apply{
+        //todo가 완료(done)된 상태라면 todo_text의 글자색 변경
+        if (todo.isDone) {
+            holder.todoText.apply {
                 setTextColor(Color.GRAY);
                 paintFlags = paintFlags or Paint.STRIKE_THRU_TEXT_FLAG;
                 setTypeface(null, Typeface.ITALIC);
@@ -61,12 +63,7 @@ public class MyAdapter {
                 setList()
             }
         }
-
-
-
-        }
     }
-
  */
 
 }
