@@ -152,7 +152,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
                                     todoItem.setContent(content);
                                     todoItem.setWriteDate(currentTime);
                                     notifyItemChanged(curPos, todoItem);
-                                    //Toast.makeText(mContext, "목록 수정이 완료 되었습니다.", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(mContext, "목록 수정이 완료 되었습니다.", Toast.LENGTH_SHORT).show();
 
                                     //bottomSheetDialog 종료
                                     bottomSheetDialog.dismiss();
