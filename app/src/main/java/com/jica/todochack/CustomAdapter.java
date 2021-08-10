@@ -51,11 +51,14 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
         //체크박스 선택시 항목을 식별하기 위한 값
         holder.id = curTodoItem.getId();
 
+        boolean isCheck = Boolean.parseBoolean(curTodoItem.getCheckBox());
+
+
         //할일 수행상태
-        boolean isCheck = false;
+       /* boolean isCheck = false;
         if(curTodoItem.getCheckBox().equals("true")){
             isCheck = true;
-        }
+        }*/
 
         holder.todo_done.setChecked(isCheck);
 
