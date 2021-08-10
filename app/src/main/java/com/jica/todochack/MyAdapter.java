@@ -27,7 +27,7 @@ public class MyAdapter {
         return MyViewHolder(view);
 
     }
-
+ sadjkahsdkuasdmk
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         //position번째에 해당하는 Todo객체 얻기
         int todo = itemList(position);

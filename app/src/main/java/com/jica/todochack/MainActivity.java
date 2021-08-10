@@ -117,6 +117,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
     private void loadRecentDB() {
         //저장되어있던 DB를 가져온다.
         mTodoItems = mDBHelper.getTodoList();
