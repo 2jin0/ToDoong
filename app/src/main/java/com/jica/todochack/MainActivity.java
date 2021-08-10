@@ -36,9 +36,11 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView mRvTodayList;
     //private TodoAdapter adapter;
     private ArrayList<TodoItem> mTodoItems;
-    private CheckBox todo_done;
+    private CheckBox todoCheck;
+
 
     private EditText etAddItem, etTodo_text;
+    private String isDone;
     //TextView tvResult;
 
     //Button ivTodoMenu;
@@ -49,7 +51,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         setInit();
+
     }
+
 
     private void setInit() {
         mDBHelper = new DBHelper(this);
@@ -87,8 +91,11 @@ public class MainActivity extends AppCompatActivity {
                         // Insert Database
                         String currentTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());    //현재 시간 연월일시분초 받아오기
 
+
                         Log.d("TextTextTextTextTextTextTextTextText", mDBHelper.toString());
-                        mDBHelper.InsertTodo(etAddTodo.getText().toString().trim(), currentTime);
+                        //할일이 추가될때는 수행여부는 false으로 저장
+                        mDBHelper.InsertTodo(etAddTodo.getText().toString().trim(), currentTime, "false");
+
 
                         //Insert UI
                         TodoItem item = new TodoItem();

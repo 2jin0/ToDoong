@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -46,7 +47,20 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.tvTodoText.setText(mTodoItems.get(position).getContent());
+        TodoItem curTodoItem = mTodoItems.get(position);
+        //체크박스 선택시 항목을 식별하기 위한 값
+        holder.id = curTodoItem.getId();
+
+        //할일 수행상태
+        boolean isCheck = false;
+        if(curTodoItem.getCheckBox().equals("true")){
+            isCheck = true;
+        }
+
+        holder.todo_done.setChecked(isCheck);
+
+        //할일
+        holder.tvTodoText.setText(curTodoItem.getContent());
 
     }
 
@@ -57,6 +71,8 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
 
     //item_todo객체 전개?
     public class ViewHolder extends RecyclerView.ViewHolder {
+        //임시 데이타베이스 저장용 id
+        private int id;     //추가
         private TextView tvTodoText;
         private ImageView ivTodoMenu;
         private CheckBox todo_done;
@@ -72,6 +88,19 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
             tvTodoText = itemView.findViewById(R.id.tvTodoText);
             ivTodoMenu = itemView.findViewById(R.id.ivTodoMenu);
             todo_done = itemView.findViewById(R.id.todo_done);
+
+
+            //체크박스 체크 여부 -- 리사이클러뷰가 생성되지 않았는데 체크박스가 나옴
+            todo_done.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        Log.d("TAG", "id:" + id + " 항목선택됨여부 : " + isChecked);
+                        //이곳에서 데이타베이스에 직접 값을 변경시켜야 한다.
+                        DBHelper dbHelper = new DBHelper(mContext);
+                        dbHelper.UpdateTodo(id, String.valueOf(isChecked));
+                }
+            });
+
 
             //RecyclerView의 ...버큰 클릭시
             ivTodoMenu.setOnClickListener(new View.OnClickListener() {
@@ -145,8 +174,9 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
                                     String content = etAddTodo.getText().toString();
                                     String currentTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());    //현재시간: 연월일시분초 받아오기
                                     String beforeTime = todoItem.getWriteDate();
+                                    String checkBox = todoItem.getCheckBox();
 
-                                    mDBHelper.UpdateTodo(content, currentTime, beforeTime);
+                                    mDBHelper.UpdateTodo(content, currentTime, beforeTime, checkBox);
 
                                     //update UI
                                     todoItem.setContent(content);
@@ -199,6 +229,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
 
                 }
             });
+
         }
     }
 

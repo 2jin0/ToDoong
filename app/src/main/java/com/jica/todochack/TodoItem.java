@@ -4,16 +4,16 @@ public class TodoItem {
     private int id;             //게시글의 고유 ID
     private String content;     //할일 내용
     private String writeDate;   //작성날짜
-    private Boolean checkBox;   //체크박스
+    private String checkBox;   //체크박스
 
     public TodoItem() {
     }
 
-    public Boolean getCheckBox() {
+    public String getCheckBox() {
         return checkBox;
     }
 
-    public void setCheckBox(Boolean checkBox) {
+    public void setCheckBox(String checkBox) {
         this.checkBox = checkBox;
     }
 

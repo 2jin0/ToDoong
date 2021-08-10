@@ -23,7 +23,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         // 데이터베이스가 생성이 될 때 호출
         //데이터베이스 -> 테이블 -> 컬럼 -> 값
-        db.execSQL("CREATE TABLE IF NOT EXISTS TodoList (id INTEGER PRIMARY KEY AUTOINCREMENT, content TEXT NOT NULL, writeDate Text NOT NULL)");
+        db.execSQL("CREATE TABLE IF NOT EXISTS TodoList (id INTEGER PRIMARY KEY AUTOINCREMENT, content TEXT NOT NULL, writeDate Text NOT NULL, checkBox TEXT NOT NULL)");
     }
 
     @Override
@@ -43,11 +43,15 @@ public class DBHelper extends SQLiteOpenHelper {
                 int id = cursor.getInt(cursor.getColumnIndex("id"));    // 체크박스, 메뉴버튼 추가?
                 String content = cursor.getString(cursor.getColumnIndex("content"));
                 String writeDate = cursor.getString(cursor.getColumnIndex("writeDate"));
+                String checkBox  = cursor.getString(cursor.getColumnIndex("checkBox"));
 
                 TodoItem todoItem = new TodoItem();
                 todoItem.setId(id);
                 todoItem.setContent(content);
                 todoItem.setWriteDate(writeDate);
+                todoItem.setCheckBox(checkBox);
+
+
                 todoItems.add(todoItem);
             }
         }
@@ -57,16 +61,21 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     //INSERT문(할일 목록을 DB에 넣는다.)
-    public void InsertTodo(String _content, String _writeDate) {
+    public void InsertTodo(String _content, String _writeDate, String _checkBox) {
         SQLiteDatabase db = getWritableDatabase();
-        db.execSQL("INSERT INTO TodoList (content, writeDate) VALUES('" + _content + "', '" + _writeDate + "');");   //JAVA언어가 아니라 SQL명령어
+        db.execSQL("INSERT INTO TodoList (content, writeDate, checkBox) VALUES('" + _content + "', '" + _writeDate + "', '" + _checkBox + "');");   //JAVA언어가 아니라 SQL명령어
     }
 
     //UPDATE 문(할일 목록을 수정한다.)
-    public void UpdateTodo(String _content, String _writeDate, String _beforeDate) {
+    public void UpdateTodo(String _content, String _writeDate, String _beforeDate, String _checkBox) {
         SQLiteDatabase db = getWritableDatabase();
-        db.execSQL("UPDATE TodoList SET content='" + _content + "', writeDate='" + _writeDate + "' WHERE writeDate='" + _beforeDate + "'");   //id를 이용해서 순서?를 알아봄
+        db.execSQL("UPDATE TodoList SET content='" + _content + "', writeDate='" + _writeDate + "', checkBox='" + _checkBox + "' WHERE writeDate='" + _beforeDate + "'");   //id를 이용해서 순서?를 알아봄
 
+    }
+
+    public void UpdateTodo(int id, String _checkBox) {
+        SQLiteDatabase db = getWritableDatabase();
+        db.execSQL("UPDATE TodoList SET checkBox='" + _checkBox + "' WHERE  id = " + id );   //id를 이용해서 순서?를 알아봄
     }
 
     //DELETE 문 (할일 목록을 제거한다.)

@@ -27,7 +27,7 @@ public class MyAdapter {
         return MyViewHolder(view);
 
     }
- sadjkahsdkuasdmk
+
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         //position번째에 해당하는 Todo객체 얻기
         int todo = itemList(position);
@@ -64,6 +64,34 @@ public class MyAdapter {
             }
         }
     }
+
+    //체크박스
+    haha_check.setChecked(true);
+    //체크 박스를 체크합니다.
+    haha_check.setChecked(false);
+    //체크 박스를 해제 합니다.
+
+
+    if(haha_check.isChecked())
+
+        {    //체크 박스가 체크 된 경우
+        }
+    else()
+
+        {   //체크 박스가 해제 된 경우
+        }
+
+        //체크박스를 체크 한 경우에 이벤트를 동작합니다.
+    //버튼 이벤트와 동일하게 작동합니다.
+        final CheckBox haha_check = (CheckBox) findViewById(R.id.octa_checkboxresource);
+
+        View.OnClickListener Clickname = new View.OnClickListener() {
+            public void onClick(View v) {
+                switch (v.getId()) {
+                    case R.id.octa_checkboxresource:
+                        break;
+                }
+                haha_check.setOnClickListener(Clickname);
  */
 
 }
