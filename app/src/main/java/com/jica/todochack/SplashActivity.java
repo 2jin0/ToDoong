@@ -22,6 +22,7 @@ public class SplashActivity  extends AppCompatActivity {
                 finish();
             }
         },1000); //splash 띄우는 시간 1초
+        // dd
     }
     @Override
     protected void onPause() {
