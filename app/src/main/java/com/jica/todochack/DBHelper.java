@@ -34,21 +34,48 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     //SELECT 문 (할일 목록들을 조회)
-    // 초기
+
     public ArrayList<TodoItem> getTodoList() {
         String curDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
         return getTodoListFromDB(curDate);
     }
-    // 선택
+
     public ArrayList<TodoItem> getTodoList(String curDate) {
         return getTodoListFromDB(curDate);
+    }
+
+    public ArrayList<String> loadCompleateDate(){
+        ArrayList<String> compleateDate = new ArrayList<String>();
+
+        SQLiteDatabase db = getReadableDatabase();
+
+        String sql = "SELECT DISTINCT writeDate " +
+                     "FROM TodoList t " +
+                     "WHERE NOT EXISTS (SELECT * " +
+                     "                  FROM TodoList " +
+                     "                  WHERE t.writeDate = writeDate AND checkbox = 'false')";
+
+        Log.d("TAG", "실행 sql : " + sql);
+
+        Cursor cursor = db.rawQuery(sql, null);
+        if (cursor.getCount() != 0) {
+            //조회온 데이터가 있을때 내부 수행
+            while (cursor.moveToNext()) {   //다음으로 이동할 데이터가 있을때까지
+                String writeDate = cursor.getString(cursor.getColumnIndex("writeDate"));
+                compleateDate.add(writeDate);
+            }
+        }
+        cursor.close();
+        return compleateDate;
     }
 
     private ArrayList<TodoItem> getTodoListFromDB(String curDate){
         ArrayList<TodoItem> todoItems = new ArrayList<>();
 
         SQLiteDatabase db = getReadableDatabase();
+
         String sql = "SELECT * FROM TodoList WHERE writeDate = '" + curDate + "' ORDER BY writeDate DESC";
+
         Cursor cursor = db.rawQuery(sql, null);
         if (cursor.getCount() != 0) {
             //조회온 데이터가 있을때 내부 수행
@@ -56,11 +83,13 @@ public class DBHelper extends SQLiteOpenHelper {
                 int id = cursor.getInt(cursor.getColumnIndex("id"));    // 체크박스, 메뉴버튼 추가?
                 String content = cursor.getString(cursor.getColumnIndex("content"));
                 String writeDate = cursor.getString(cursor.getColumnIndex("writeDate"));
+                String checkBox = cursor.getString(cursor.getColumnIndex("checkBox"));
 
                 TodoItem todoItem = new TodoItem();
                 todoItem.setId(id);
                 todoItem.setContent(content);
                 todoItem.setWriteDate(writeDate);
+                todoItem.setCheckBox(checkBox);
 
                 Log.d("TAG","DBHelper-getTodoList(String) 날짜값:" + writeDate);
 
@@ -86,7 +115,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public void UpdateTodo(int id, String _checkBox) {
         SQLiteDatabase db = getWritableDatabase();
-        db.execSQL("UPDATE TodoList SET checkBox='" + _checkBox + "' WHERE  id = " + id );   //id를 이용해서 순서?를 알아봄
+        db.execSQL("UPDATE TodoList SET checkBox='" + _checkBox + "' WHERE  id = " + id );
     }
 
     //DELETE 문 (할일 목록을 제거한다.)

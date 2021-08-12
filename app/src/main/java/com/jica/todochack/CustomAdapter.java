@@ -19,21 +19,48 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.prolificinteractive.materialcalendarview.CalendarDay;
+import com.prolificinteractive.materialcalendarview.DayViewDecorator;
+import com.prolificinteractive.materialcalendarview.DayViewFacade;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.concurrent.Executors;
 
 //adapter는 main의 list와 연동
 public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder> {
-
+    CalendarActivity owner;
     private ArrayList<TodoItem> mTodoItems;
     private Context mContext;
     private DBHelper mDBHelper;
 
+    /* 원본
     public CustomAdapter(ArrayList<TodoItem> mTodoItems, Context mContext) {
         this.mTodoItems = mTodoItems;
+        this.mContext = mContext;
+        mDBHelper = new DBHelper(mContext);
+    }
+
+     */
+
+    //MainActivity에서 생성할때 이용한다.
+    public CustomAdapter( ArrayList<TodoItem> mTodoItems, Context mContext) {
+        this.mTodoItems = mTodoItems;
+        Log.d("TAG", "오늘날짜 모든 데이타 : " + mTodoItems.toString());
+
+        this.mContext = mContext;
+        mDBHelper = new DBHelper(mContext);
+    }
+
+    //CalendarActivity에서 생성할때 이용한다.
+    public CustomAdapter(CalendarActivity owner, ArrayList<TodoItem> mTodoItems, Context mContext) {
+        this.owner = owner;
+        this.mTodoItems = mTodoItems;
+        Log.d("TAG", "오늘날짜 모든 데이타 : " + mTodoItems.toString());
+
         this.mContext = mContext;
         mDBHelper = new DBHelper(mContext);
     }
@@ -56,12 +83,13 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
 
 
         //할일 수행상태
-       /* boolean isCheck = false;
-        if(curTodoItem.getCheckBox().equals("true")){
-            isCheck = true;
-        }*/
+        //boolean isCheck = false;
+        //if(curTodoItem.getCheckBox().equals("true")){
+        //    isCheck = true;
+        //}
 
         holder.todo_done.setChecked(isCheck);
+        Log.d("TAG", "할일 수행상태 설정 : " + isCheck);
 
         //할일
         holder.tvTodoText.setText(curTodoItem.getContent());
@@ -100,8 +128,17 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
                     //이곳에서 데이타베이스에 직접 값을 변경시켜야 한다.
                     DBHelper dbHelper = new DBHelper(mContext);
                     dbHelper.UpdateTodo(id, String.valueOf(isChecked));
+                    /*
+                    if(owner != null) {
+                        if( isChecked) {
+                            owner.new ApiSimulator().executeOnExecutor(Executors.newSingleThreadExecutor());
+                        }
+                        //else{
+                        //    owner.mcv.removeDecorator(new DayViewDecorator().shouldDecorat);
+                        //}
+                    }
 
-
+                     */
                 }
             });
 
@@ -229,8 +266,6 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
                     });
                     //대화상자 보이기기
                     dialogMenu.show();
-
-
                 }
             });
         }

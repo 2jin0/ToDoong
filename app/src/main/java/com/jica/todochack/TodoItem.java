@@ -43,4 +43,13 @@ public class TodoItem implements Serializable {
         this.writeDate = writeDate;
     }
 
+    @Override
+    public String toString() {
+        return "TodoItem{" +
+                "id=" + id +
+                ", content='" + content + '\'' +
+                ", writeDate='" + writeDate + '\'' +
+                ", checkBox='" + checkBox + '\'' +
+                '}';
+    }
 }

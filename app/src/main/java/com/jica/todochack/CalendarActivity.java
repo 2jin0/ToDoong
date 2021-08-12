@@ -48,7 +48,7 @@ public class CalendarActivity extends AppCompatActivity implements  OnDateSelect
     private CustomAdapter mAdapter;
 
     //UI객체
-    private MaterialCalendarView mcv;
+    MaterialCalendarView mcv;
     String curDate;
     private TextView tvDate;
 
@@ -77,16 +77,11 @@ public class CalendarActivity extends AppCompatActivity implements  OnDateSelect
 
         mTodoItems = new ArrayList<>();
 
-
-
         FloatingActionButton fab_back = (FloatingActionButton) findViewById(R.id.fab_back);
         fab_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                 Intent intent = new Intent(); // 인텐트 객체 생성하고
-                // TodoItem todoItem = new TodoItem()
-                // intent.putExtra("name", "suzin"); // 인텐트 객체에 데이터 넣기 ???
-                // setResult(RESULT_OK, intent); // 응답 보내기 ??? RESULT_FIRST_USER
+                Intent intent = new Intent(); // 인텐트 객체 생성하고
                 finish(); // 현재 액티비티 없애기
             }
 
@@ -99,8 +94,12 @@ public class CalendarActivity extends AppCompatActivity implements  OnDateSelect
         );
 
 
-        String[] result = {"2021,08,01", "2021,09,21", "2021,07,25", "2021,08,05"};
-        new ApiSimulator(result).executeOnExecutor(Executors.newSingleThreadExecutor());
+
+
+        //String[] result = {"2021,08,01", "2021,09,21", "2021,07,25", "2021,08,05"};
+        //new ApiSimulator(result).executeOnExecutor(Executors.newSingleThreadExecutor());
+        new ApiSimulator().executeOnExecutor(Executors.newSingleThreadExecutor());
+
 
         //load recent Database
         loadRecentDB();
@@ -171,7 +170,7 @@ public class CalendarActivity extends AppCompatActivity implements  OnDateSelect
         mTodoItems = mDBHelper.getTodoList();
         if (mAdapter == null) {
             //최초 실행시만 어탭터를 새로만들어서 읽어온 데이타 설정
-            mAdapter = new CustomAdapter(mTodoItems, this);
+            mAdapter = new CustomAdapter(this, mTodoItems, this);
             mRvTodayList.setHasFixedSize(true);
             mRvTodayList.setAdapter(mAdapter);
         }else{
@@ -185,7 +184,7 @@ public class CalendarActivity extends AppCompatActivity implements  OnDateSelect
         //저장되어있던 DB의 선택날짜의 데이타를 리사이클러뷰에 보여준다.
         mTodoItems = mDBHelper.getTodoList(curDate);
         if (mAdapter == null) {
-            mAdapter = new CustomAdapter(mTodoItems, this);
+            mAdapter = new CustomAdapter(this, mTodoItems, this);
             mRvTodayList.setHasFixedSize(true);
             mRvTodayList.setAdapter(mAdapter);
         }else{
@@ -203,61 +202,62 @@ public class CalendarActivity extends AppCompatActivity implements  OnDateSelect
         loadRecentDBDate(curDate);
     }
 
-    private class ApiSimulator extends AsyncTask<Void, Void, List<CalendarDay>> {
 
-        String[] Time_Result;
 
-        ApiSimulator(String[] Time_Result) {
-            this.Time_Result = Time_Result;
-        }
+      class ApiSimulator extends AsyncTask<Void, Void, List<CalendarDay>> {
 
         @Override
         protected List<CalendarDay> doInBackground(@NonNull Void... voids) {
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+
+            //데이타베이스에서 SELECT문으로 --- 특정 writeDate값의 모든 checkBox가 true항목만 구해오는 SELECT을 작성항 실행
+            ArrayList<String> compleateDate = mDBHelper.loadCompleateDate();
 
             Calendar calendar = Calendar.getInstance();
             ArrayList<CalendarDay> dates = new ArrayList<>();
 
-
-            // 특정날짜 달력에 점표시해주는곳
-            // 월은 0이 1월 년,일은 그대로
-            //string 문자열인 Time_Result 을 받아와서 ,를 기준으로 짜르고 string을 int 로 변환
-            for (int i = 0; i < Time_Result.length; i++) {
-
-                //이부분에서 day를 선언하면 초기 값에 오늘 날짜 데이터 들어감
-                //오늘 날짜 데이터를 첫 번째 인자로 넣기 때문에 데이터가 하나씩 밀려 마지막 데이터는 표시되지 않고, 오늘 날짜 데이터가 표시 됨.
-                // day선언 주석처리
-
-                //                CalendarDay day = CalendarDay.from(calendar);
-                //                Log.e("데이터 확인","day"+day);
-                String[] time = Time_Result[i].split(",");
+            for( int i=0; i<compleateDate.size(); i++){
+                String sDate = compleateDate.get(i);
+                String[] time = sDate.split("-");
 
                 int year = Integer.parseInt(time[0]);
                 int month = Integer.parseInt(time[1]);
                 int dayy = Integer.parseInt(time[2]);
 
-                //선언문을 아래와 같은 위치에 선언
-                //먼저 .set 으로 데이터를 설정한 다음 CalendarDay day = CalendarDay.from(calendar); 선언해주면 첫 번째 인자로 새로 정렬한 데이터를 넣어 줌.
                 calendar.set(year, month - 1, dayy);
                 CalendarDay day = CalendarDay.from(calendar);
-                dates.add(day); //다이얼로그에서 저장한 date를 보내줄 수 있게 하기
+                dates.add(day);
             }
+
             return dates;
-        }
 
-        @Override
-        protected void onPostExecute(@NonNull List<CalendarDay> calendarDays) {
-            super.onPostExecute(calendarDays);
+            // 1 데이터베이스에 저장이 되어 있는 경우
+            // 2 일자별
+            // 3 체크박스의 개수와 체크박스가 ture인 개수가 같은 경우?
+            // SELECT count(checkBox) FROM Todolist 와
+            // true
 
-            if (isFinishing()) {
-                return;
+            //쿼리를 실행하여 얻어진 writeDate를 아래의 형식으로 작성하여 리턴해 준다.
+            /*
+
+
+             */
+
             }
 
-            mcv.addDecorator(new EventDecorator(getColor(R.color.i), calendarDays, CalendarActivity.this));
+            @Override
+            protected void onPostExecute(@NonNull List<CalendarDay> calendarDays) {
+                super.onPostExecute(calendarDays);
+                Log.d("TAG", "할일완료 날짜 : " + calendarDays.toString());
+
+                if (isFinishing()) {
+                    return;
+                }
+
+                mcv.addDecorator(new EventDecorator(getColor(R.color.i), calendarDays, CalendarActivity.this));
+
+            }
+
+
         }
-    }
+
 }
