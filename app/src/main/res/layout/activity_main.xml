@@ -41,10 +41,11 @@
             app:useCompatPadding="true" />
 
         <ImageView
+            android:id="@+id/hyaro"
             android:layout_width="250dp"
             android:layout_height="125dp"
-            android:layout_gravity="center"
-            android:id="@+id/hyaro"/>
+            android:layout_gravity="center_horizontal|center_vertical"
+            android:layout_marginTop="20dp" />
 
     </FrameLayout>
 
@@ -52,12 +53,14 @@
         android:id="@+id/rvTodayList"
         android:layout_width="0dp"
 
-        android:layout_height="280dp"
+        android:layout_height="0dp"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="16dp"
-        android:layout_marginRight="16dp"
 
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="16dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toTopOf="@+id/btnAddList"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/container"
@@ -73,8 +76,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rvTodayList" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <!--
     <include layout="@layout/activity_bottom_sheet" />
