@@ -17,8 +17,8 @@ Jica Android 백앤드 개발자 과정의 Todoong팀 프로젝트 입니다.<br
 - BottomSheet를 이용하여 +버튼을 클릭시 할일 목록 작성 페이지를 띄운다.
 - CalenderView와 항목 데이터를 연동하여 일자별로 사용자가 작성 데이터를 볼 수 있도록 한다.<br>
 
-<추후 추가 될 내용><br>
--checkBox 체크시 캐릭터 행동 변화
+<추후 추가 될 내용>
+- checkBox 체크시 캐릭터 행동 변화
 
 <br><업데이트 상황>
 - 어플 첫 실행시 사용안내페이지 --> intro slider로 구현중
