@@ -1,7 +1,6 @@
 package com.jica.todochack.Decorator;
 
 
-
 import com.jica.todochack.CalendarActivity;
 
 import com.jica.todochack.R;

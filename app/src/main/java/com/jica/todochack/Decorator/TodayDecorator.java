@@ -40,10 +40,4 @@ public class TodayDecorator implements DayViewDecorator {
     }
 
 
-
-
-
-
-
-
 }

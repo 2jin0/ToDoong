@@ -14,6 +14,7 @@ import java.util.Date;
 
 public class DBHelper extends SQLiteOpenHelper {
 
+    public static final String TAG = "DBHelper";
     private static final int DB_VERSION = 1;
     private static final String DB_NAME = "todoong.db";
 
@@ -25,7 +26,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         //데이터베이스가 생성이 될 때 호출
         //데이터베이스 -> 테이블 -> 컬럼 -> 값
-        db.execSQL("CREATE TABLE IF NOT EXISTS TodoList (id INTEGER PRIMARY KEY AUTOINCREMENT, content TEXT NOT NULL, writeDate Text NOT NULL, checkBox TEXT NOT NULL)");
+        db.execSQL("CREATE TABLE IF NOT EXISTS TodoList (id INTEGER PRIMARY KEY AUTOINCREMENT, content TEXT NOT NULL, writeDate TEXT NOT NULL, checkBox TEXT NOT NULL)");
     }
 
     @Override
@@ -44,16 +45,16 @@ public class DBHelper extends SQLiteOpenHelper {
         return getTodoListFromDB(curDate);
     }
 
-    public ArrayList<String> loadCompleateDate(){
+    public ArrayList<String> loadCompleateDate() {
         ArrayList<String> compleateDate = new ArrayList<String>();
 
         SQLiteDatabase db = getReadableDatabase();
 
         String sql = "SELECT DISTINCT writeDate " +
-                     "FROM TodoList t " +
-                     "WHERE NOT EXISTS (SELECT * " +
-                     "                  FROM TodoList " +
-                     "                  WHERE t.writeDate = writeDate AND checkbox = 'false')";
+                "FROM TodoList t " +
+                "WHERE NOT EXISTS (SELECT * " +
+                "                  FROM TodoList " +
+                "                  WHERE t.writeDate = writeDate AND checkbox = 'false')";
 
         Log.d("TAG", "실행 sql : " + sql);
 
@@ -69,7 +70,7 @@ public class DBHelper extends SQLiteOpenHelper {
         return compleateDate;
     }
 
-    private ArrayList<TodoItem> getTodoListFromDB(String curDate){
+    private ArrayList<TodoItem> getTodoListFromDB(String curDate) {
         ArrayList<TodoItem> todoItems = new ArrayList<>();
 
         SQLiteDatabase db = getReadableDatabase();
@@ -91,7 +92,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 todoItem.setWriteDate(writeDate);
                 todoItem.setCheckBox(checkBox);
 
-                Log.d("TAG","DBHelper-getTodoList(String) 날짜값:" + writeDate);
+                Log.d("TAG", "DBHelper-getTodoList(String) 날짜값:" + writeDate);
 
                 todoItems.add(todoItem);
             }
@@ -106,22 +107,29 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL("INSERT INTO TodoList (content, writeDate, checkBox) VALUES('" + _content + "', '" + _writeDate + "', '" + _checkBox + "');");   //JAVA언어가 아니라 SQL명령어
     }
 
-    //UPDATE 문(할일 목록을 수정한다.)
-    public void UpdateTodo(String _content, String _writeDate, String _beforeDate, String _checkBox) {
+    //UPDATE 문(DB 내용을 수정한다.)
+    public void UpdateTodo(String _content, String _writeDate, int _id, String _checkBox) {
         SQLiteDatabase db = getWritableDatabase();
-        db.execSQL("UPDATE TodoList SET content='" + _content + "', writeDate='" + _writeDate + "', checkBox='" + _checkBox + "' WHERE writeDate='" + _beforeDate + "'");   //id를 이용해서 순서?를 알아봄
+        db.execSQL("UPDATE TodoList SET content='" + _content + "', writeDate='" + _writeDate + "', checkBox='" + _checkBox + "' WHERE id='" + _id + "'");
 
     }
 
-    public void UpdateTodo(int id, String _checkBox) {
+    public void UpdateTodo(int _id, String _checkBox) {
         SQLiteDatabase db = getWritableDatabase();
-        db.execSQL("UPDATE TodoList SET checkBox='" + _checkBox + "' WHERE  id = " + id );
+        db.execSQL("UPDATE TodoList SET checkBox='" + _checkBox + "' WHERE  id = " + _id);
     }
 
-    //DELETE 문 (할일 목록을 제거한다.)
-    public void DeleteTodo(String _beforeDate) {
+    //DELETE 문 (DB에서 제거한다.)
+    public void DeleteTodo(int _id) {
         SQLiteDatabase db = getWritableDatabase();
-        db.execSQL("DELETE FROM TodoList WHERE writeDate='" + _beforeDate + "'");
+        try {
+            db.execSQL("DELETE FROM TodoList WHERE id='" + _id + "'");
+            Log.d(TAG, _id + " 자료의 row를 삭제했습니다.");
+
+        } catch (Exception ex) {
+            Log.e(TAG, "Exception in executing delete SQL.", ex);
+        }
+
     }
 
 }

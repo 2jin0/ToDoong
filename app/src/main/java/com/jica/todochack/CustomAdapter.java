@@ -213,11 +213,12 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
                                     // BottomSheetDialog에서 모든 편집을 하고 저장버튼(V) 클릭시 수행할 기능
 
                                     String content = etAddTodo.getText().toString();
-                                    String currentTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());    //현재시간: 연월일시분초 받아오기
-                                    String beforeTime = todoItem.getWriteDate();
+                                    String currentTime = new SimpleDateFormat("yyyy-MM-dd").format(new Date());    //현재시간: 연월일시분초 받아오기
+                                    //String beforeTime = todoItem.getWriteDate();
                                     String checkBox = todoItem.getCheckBox();
+                                    int id = todoItem.getId();
 
-                                    mDBHelper.UpdateTodo(content, currentTime, beforeTime, checkBox);
+                                    mDBHelper.UpdateTodo(content, currentTime, id, checkBox);
 
                                     //update UI
                                     todoItem.setContent(content);
@@ -253,7 +254,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
                         public void onClick(View v) {
                             // delete table
                             String beforeTime = todoItem.getWriteDate();
-                            mDBHelper.DeleteTodo(beforeTime);
+                            mDBHelper.DeleteTodo(id);
                             // delete UI
                             mTodoItems.remove(curPos);
                             notifyItemRemoved(curPos);
