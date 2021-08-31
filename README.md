@@ -1,8 +1,8 @@
 # ToDoong
 
-Jica Android 백앤드 개발자 과정의 Todoong팀 프로젝트 입니다.
-리더: Lee Jinyoung
-팀원: Kang mingu, Juong ahyun
+Jica Android 백앤드 개발자 과정의 Todoong팀 프로젝트 입니다.<br>
+리더: Lee Jinyoung<br>
+팀원: Kang mingu, Juong ahyun<br>
 
 <프로젝트 내용>
 
