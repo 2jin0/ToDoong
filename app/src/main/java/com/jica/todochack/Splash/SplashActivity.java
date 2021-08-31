@@ -1,4 +1,4 @@
-package com.jica.todochack;
+package com.jica.todochack.Splash;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -7,6 +7,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+
+import com.jica.todochack.MainActivity;
+import com.jica.todochack.R;
 
 public class SplashActivity  extends AppCompatActivity {
     /*
@@ -28,7 +31,7 @@ public class SplashActivity  extends AppCompatActivity {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(intent);
                 finish();
                 /*
