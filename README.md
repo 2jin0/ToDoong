@@ -4,6 +4,10 @@ Jica Android 백앤드 개발자 과정의 Todoong팀 프로젝트 입니다.<br
 리더: Lee Jinyoung<br>
 팀원: Kang mingu, Juong ahyun<br>
 
+<실행화면>
+<img src="https://i.imgur.com/NX1SBoc.png">
+<img src="https://i.imgur.com/eXF0NTP.png"><br>
+
 <프로젝트 내용>
 
 - 목표: 사용자가 즐겁게 일정을 소화할 수 있도록 캐릭터와 연동 된 todoList를 만든다.
@@ -27,3 +31,4 @@ Jica Android 백앤드 개발자 과정의 Todoong팀 프로젝트 입니다.<br
 <br>
 ------------------------------------------------------------------------------------------------------------------------------------<br>
 ※ 본 코드를 팀원들 허락없이 수정/개인적인 사용/상업적 사용을 금지합니다. 
+※ 디자인 저작권은 팀원 Juong ahyun님께 있습니다.
