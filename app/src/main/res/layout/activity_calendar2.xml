@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/RootLayout_cal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#EFF3F6"
+    android:backgroundTint="#EFF3F6"
+    tools:context=".CalendarActivity">
+
+        <FrameLayout
+            android:id="@+id/container_cal"
+            android:layout_width="match_parent"
+            android:layout_height="274dp"
+            android:background="@drawable/corner_shape_cal"
+            tools:ignore="MissingConstraints">
+
+                <com.prolificinteractive.materialcalendarview.MaterialCalendarView
+                    android:id="@+id/mcv"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:background="@color/white"
+                    app:layout_constraintEnd_toEndOf="parent"
+
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:mcv_selectionColor="#A4D9E3"
+                    app:mcv_showOtherDates="defaults">
+                </com.prolificinteractive.materialcalendarview.MaterialCalendarView>
+
+                <!--
+                app:mcv_dateTextAppearance="@style/CustomTextAppearance"
+                    app:mcv_headerTextAppearance="@style/CustomTextAppearance"
+
+                    app:mcv_weekDayTextAppearance="@style/CustomTextAppearance"
+                    -->
+
+        </FrameLayout>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_back"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+
+            android:adjustViewBounds="false"
+            android:background="@color/white"
+            android:clickable="true"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_fab_back"
+            app:backgroundTint="@android:color/white"
+            app:borderWidth="0dp"
+
+            app:fabSize="mini"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:useCompatPadding="true"
+            tools:ignore="MissingConstraints" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/corner_shape_cal2"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/container_cal">
+
+                <Button
+                    android:id="@+id/button"
+                    android:layout_width="25dp"
+                    android:layout_height="15dp"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@drawable/ic_calendar_down" />
+
+                <TextView
+                    android:id="@+id/textView3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="18dp"
+                    android:layout_marginTop="10dp"
+                    android:text="TextView"
+                    android:textSize="20dp" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvTodayList"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:layout_weight="1"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:listitem="@layout/item_todo">
+
+                </androidx.recyclerview.widget.RecyclerView>
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/fab_back2"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+
+                    android:layout_gravity="center_horizontal"
+                    android:adjustViewBounds="false"
+                    android:background="@color/white"
+                    android:clickable="true"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ic_baseline_add_24"
+                    app:backgroundTint="@android:color/white"
+
+                    app:borderWidth="0dp"
+                    app:fabSize="mini"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:useCompatPadding="true"
+                    tools:ignore="MissingConstraints" />
+
+
+
+        </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
