@@ -4,7 +4,7 @@ Jica Android 백앤드 개발자 과정의 Todoong팀 프로젝트 입니다.<br
 리더: Lee Jinyoung<br>
 팀원: Kang mingu, Juong ahyun<br>
 
-<실행화면><
+<실행화면><br>
 <img src="https://i.imgur.com/NX1SBoc.png">
 <img src="https://i.imgur.com/eXF0NTP.png"><br>
 
